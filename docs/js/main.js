@@ -14,11 +14,11 @@ class Captain extends HTMLElement {
     onCollision(numberOfHits) {
         if (numberOfHits == 1) {
             this.style.backgroundImage = `url(images/emote_alert.png)`;
-            console.log(`Captain of ${this.ship.color} pirateship WOKE UP!`);
+            Messageboard.getInstance().addMessage(`Captain of ${this.ship.color} pirateship WOKE UP!`);
         }
         else if (numberOfHits == 7) {
             this.style.backgroundImage = `url(images/emote_faceAngry.png)`;
-            console.log(`Captain of ${this.ship.color} pirateship got ANGRY!`);
+            Messageboard.getInstance().addMessage(`Captain of ${this.ship.color} pirateship got ANGRY!`);
         }
     }
 }
@@ -50,6 +50,22 @@ class Main {
     }
 }
 window.addEventListener("load", () => new Main());
+class Messageboard extends HTMLElement {
+    constructor() {
+        super();
+        let game = document.getElementsByTagName("game")[0];
+        game.appendChild(this);
+    }
+    static getInstance() {
+        if (!Messageboard.instance)
+            Messageboard.instance = new Messageboard();
+        return Messageboard.instance;
+    }
+    addMessage(message) {
+        this.append(message);
+    }
+}
+window.customElements.define("messageboard-component", Messageboard);
 class Ship extends HTMLElement {
     constructor() {
         super();
@@ -132,7 +148,7 @@ class PirateShip extends Ship {
         if (this._hit && !this.previousHit) {
             this.captain.onCollision(++this.numberOfHits);
             let times = this.numberOfHits == 1 ? "time" : "times";
-            console.log(`${this.color} pirateship got hit ${this.numberOfHits} ${times}!`);
+            Messageboard.getInstance().addMessage(`${this.color} pirateship got hit ${this.numberOfHits} ${times}!`);
         }
         this.previousHit = this._hit;
     }

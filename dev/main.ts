@@ -1,17 +1,15 @@
 class Main {
 
     private ships : PirateShip[] = []
-    private message: Messageboard;
+
 
     constructor() {
         for (let i = 0; i < 10; i++) {
             this.ships.push(new PirateShip())
         }
 
-        this.message = Messageboard.getInstance();
 
         //hier loop is vast
-        this.message.addMessage(this.message);
 
         this.gameLoop()
         
